@@ -93,7 +93,7 @@ public class LoginController {
             result.error500("验证码无效");
             return result;
         }
-        String lowerCaseCaptcha = captcha.toLowerCase();
+/*        String lowerCaseCaptcha = captcha.toLowerCase();
         //update-begin-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
 		// 加入密钥作为混淆，避免简单的拼接，被外部利用，用户自定义该密钥即可
         String origin = lowerCaseCaptcha+sysLoginModel.getCheckKey()+jeecgBaseConfig.getSignatureSecret();
@@ -107,7 +107,7 @@ public class LoginController {
 			// 改成特殊的code 便于前端判断
 			result.setCode(HttpStatus.PRECONDITION_FAILED.value());
 			return result;
-		}
+		}*/
 		//update-end-author:taoyan date:20190828 for:校验验证码
 		
 		//1. 校验用户是否有效
@@ -135,7 +135,7 @@ public class LoginController {
 		//用户登录信息
 		userInfo(sysUser, result);
 		//update-begin--Author:liusq  Date:20210126  for：登录成功，删除redis中的验证码
-		redisUtil.del(realKey);
+	//	redisUtil.del(realKey);
 		//update-begin--Author:liusq  Date:20210126  for：登录成功，删除redis中的验证码
 		redisUtil.del(CommonConstant.LOGIN_FAIL + username);
 		LoginUser loginUser = new LoginUser();
