@@ -292,3 +292,20 @@ third-app:
       # appSecret
       client-secret: ??
       agent-id: ??
+
+pdf:
+  #word转pdf文件生成路径
+ docxPath: C:\Users\1\Desktop\workTppdf\
+  #凭证路径
+ licensePath: C:\Users\1\Desktop\workTppdf\license.xml
+
+ licensePaths: C:\Users\1\Desktop\workTppdf\licenses.xml
+  #临时生成文件路径
+ docxTempPath: C:\Users\1\Desktop\workTppdf\
+#pdf:
+    #word转pdf文件生成路径
+#  docxPath: /opt/jeecg-boot/wordTemplate/wordCache/
+    #凭证路径
+#  licensePath: /opt/jeecg-boot/wordTemplate/wordCache/license.xml
+  #临时生成文件路径
+#  docxTempPath: /opt/jeecg-boot/wordTemplate/

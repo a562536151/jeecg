@@ -39,6 +39,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private CommonAPI commonApi;
 
+
     @Lazy
     @Resource
     private RedisUtil redisUtil;
@@ -133,10 +134,8 @@ public class ShiroRealm extends AuthorizingRealm {
         if (loginUser.getStatus() != 1) {
             throw new AuthenticationException("账号已被锁定,请联系管理员!");
         }
-        // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
-            throw new AuthenticationException(CommonConstant.TOKEN_IS_INVALID_MSG);
-        }
+
+
         //update-begin-author:taoyan date:20210609 for:校验用户的tenant_id和前端传过来的是否一致
         String userTenantIds = loginUser.getRelTenantIds();
         if(oConvertUtils.isNotEmpty(userTenantIds)){
@@ -191,30 +190,8 @@ public class ShiroRealm extends AuthorizingRealm {
      * @param passWord
      * @return
      */
-    public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String cacheToken = String.valueOf(redisUtil.get(CommonConstant.PREFIX_USER_TOKEN + token));
-        if (oConvertUtils.isNotEmpty(cacheToken)) {
-            // 校验token有效性
-            if (!JwtUtil.verify(cacheToken, userName, passWord)) {
-                String newAuthorization = JwtUtil.sign(userName, passWord);
-                // 设置超时时间
-                redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
-                redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME *2 / 1000);
-                log.debug("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— "+ token);
-            }
-            //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
-//			else {
-//				// 设置超时时间
-//				redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, cacheToken);
-//				redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
-//			}
-            //update-end--Author:scott  Date:20191005   for：解决每次请求，都重写redis中 token缓存问题
-            return true;
-        }
 
-        //redis中不存在此TOEKN，说明token非法返回false
-        return false;
-    }
+
 
     /**
      * 清除当前用户的权限认证缓存

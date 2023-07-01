@@ -26,6 +26,11 @@ public class WebSocketConfig {
         return new WebsocketFilter();
     }
 
+    /**
+     * 得到过滤器bean注册
+     *
+     * @return {@link FilterRegistrationBean}
+     */
     @Bean
     public FilterRegistrationBean getFilterRegistrationBean(){
         FilterRegistrationBean bean = new FilterRegistrationBean();

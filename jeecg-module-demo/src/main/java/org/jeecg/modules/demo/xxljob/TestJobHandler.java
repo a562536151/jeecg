@@ -1,74 +1,64 @@
-//
-//package org.jeecg.modules.demo.xxljob;
-//
-//import com.xxl.job.core.biz.model.ReturnT;
-//import com.xxl.job.core.handler.annotation.XxlJob;
-//import lombok.extern.slf4j.Slf4j;
-//import org.jeecg.common.config.mqtoken.UserTokenContext;
-//import org.jeecg.common.constant.CommonConstant;
-//import org.jeecg.common.system.api.ISysBaseAPI;
-//import org.jeecg.common.system.util.JwtUtil;
-//import org.jeecg.common.util.RedisUtil;
-//import org.jeecg.common.util.SpringContextUtils;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Component;
-//
-//
-///**
-// * xxl-job定时任务测试
-// */
-//@Component
-//@Slf4j
-//public class TestJobHandler {
-//    @Autowired
-//    ISysBaseAPI sysBaseApi;
-//
-//    /**
-//     * 简单任务
-//     *
-//     * 测试：无token调用feign接口
-//     *
-//     * @param params
-//     * @return
-//     */
-//
-//    @XxlJob(value = "testJob")
-//    public ReturnT<String> demoJobHandler(String params) {
-//        //1.生成临时令牌Token到线程中
-//        UserTokenContext.setToken(getTemporaryToken());
-//
-//        log.info("我是 jeecg-demo 服务里的定时任务 testJob , 我执行了...............................");
-//        log.info("我调用 jeecg-system 服务的字典接口：{}",sysBaseApi.queryAllDict());
-//        //。。。此处可以写多个feign接口调用
-//
-//        //2.使用完，删除临时令牌Token
-//        UserTokenContext.remove();
-//        return ReturnT.SUCCESS;
-//    }
-//
-//    public void init() {
-//        log.info("init");
-//    }
-//
-//    public void destroy() {
-//        log.info("destory");
-//    }
-//
-//    /**
-//     * 获取临时令牌
-//     *
-//     * 模拟登陆接口，获取模拟 Token
-//     * @return
-//     */
-//    public static String getTemporaryToken() {
-//        RedisUtil redisUtil = SpringContextUtils.getBean(RedisUtil.class);
-//        // 模拟登录生成Token
-//        String token = JwtUtil.sign("??", "??");
-//        // 设置Token缓存有效时间为 5 分钟
-//        redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
-//        redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, 5 * 60 * 1000);
-//        return token;
-//    }
-//
-//}
-//
+/*
+// 根据businessKey获取流程实例
+ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+        .processInstanceBusinessKey(businessKey)
+        .singleResult();
+
+// 根据taskDefKey获取当前节点任务
+        Task currentTask = taskService.createTaskQuery()
+        .processInstanceId(processInstance.getId())
+        .taskDefinitionKey(taskDefKey)
+        .singleResult();
+
+// 获取流程定义信息
+        ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processInstance.getProcessDefinitionId());
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+
+// 根据bpmnModel创建activity实例
+        ProcessEngineConfigurationImpl engineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
+        ActivityInstance activityInstance = engineConfiguration.getRuntimeService()
+        .getActivityInstance(processInstance.getId());
+        ReadOnlyProcessDefinition processDefinitionEntity = engineConfiguration.getDeploymentManager()
+        .getProcessDefinitionCache().get(processDefinition.getId());
+        ActivityInstanceStateHandler activityInstanceStateHandler = engineConfiguration.getActivityInstanceStateHandler();
+        ActivityExecutionTree activityExecutionTree = engineConfiguration.getExecutionTreeService()
+        .createExecutionTree(processInstance.getId(), processDefinitionEntity);
+        ActivityExecution activityExecution = activityExecutionTree.findExecutionById(currentTask.getExecutionId());
+
+        ActivityBehaviorFactory behaviorFactory = engineConfiguration.getActivityBehaviorFactory();
+        DelegateActivityBehavior delegateActivityBehavior = (DelegateActivityBehavior) behaviorFactory.createActivityBehavior(currentTask.getTaskDefinitionKey());
+        ReadOnlyActivityDefinition activityDefinition = processDefinitionEntity.findActivityDefinition(currentTask.getTaskDefinitionKey());
+        ActivityExecutionEntity activityExecutionEntity = (ActivityExecutionEntity) engineConfiguration
+        .getExecutionEntityManager().findById(activityExecution.getId());
+
+        ActivityImpl activity = bpmnModel.getProcesses().get(0).findActivity(currentTask.getTaskDefinitionKey());
+        activity.setActivityBehavior(delegateActivityBehavior);
+
+        try {
+// 获取当前节点
+        ActivityNode currentNode = activity.getCurrentNode(activityExecutionEntity, activityExecutionTree,
+        activityInstanceStateHandler, processDefinition, bpmnModel, behaviorFactory);
+
+// 创建多个审批人节点，并添加到流程中
+        List<ActivityNode> approverNodes = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+        ActivityNode newApproverNode = new ActivityNode("New Approver " + i, "This is a new approver node " + i);
+
+        UserTask userTask = new UserTask();
+        userTask.setAssignee("admin");
+        userTask.setName("New Approver Task " + i);
+
+        newApproverNode.setActivityBehavior(userTask);
+        activity.addNode(newApproverNode);
+
+        approverNodes.add(newApproverNode);
+        }
+
+// 为当前节点添加多个输出节点，与新审批人节点相连
+        for (ActivityNode approverNode : approverNodes) {
+        currentNode.addOutcome("Approve", approverNode);
+        }
+        } catch (Exception e) {
+// 处理异常
+        e.printStackTrace();
+        }*/

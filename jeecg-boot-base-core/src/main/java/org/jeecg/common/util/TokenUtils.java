@@ -96,10 +96,6 @@ public class TokenUtils {
         if (user.getStatus() != 1) {
             throw new JeecgBoot401Exception("账号已被锁定,请联系管理员!");
         }
-        // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, user.getPassword(), redisUtil)) {
-            throw new JeecgBoot401Exception(CommonConstant.TOKEN_IS_INVALID_MSG);
-        }
         return true;
     }
 

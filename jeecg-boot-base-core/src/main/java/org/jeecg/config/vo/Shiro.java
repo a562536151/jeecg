@@ -1,9 +1,9 @@
 package org.jeecg.config.vo;
 
+
 /**
- * @Description: TODO
- * @author: scott
- * @date: 2022年01月21日 14:23
+ * @author jiangjian
+ * @date 2023/05/03
  */
 public class Shiro {
     private String excludeUrls = "";

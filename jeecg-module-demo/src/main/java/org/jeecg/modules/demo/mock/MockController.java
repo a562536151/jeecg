@@ -29,10 +29,12 @@ public class MockController {
 	private final String JSON_PATH = "classpath:org/jeecg/modules/demo/mock/json";
 
 	/**
+	 * 获取json数据
 	 * 通用json访问接口
 	 * 格式： http://localhost:8080/jeecg-boot/api/json/{filename}
-	 * @param filename
-	 * @return
+	 *
+	 * @param filename 文件名
+	 * @return {@link String}
 	 */
 	@RequestMapping(value = "/json/{filename}", method = RequestMethod.GET)
 	public String getJsonData(@PathVariable("filename") String filename) {

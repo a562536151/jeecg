@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -21,6 +19,7 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.DateUtils;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.UUIDGenerator;
+import org.jeecg.modules.demo.cc.pdfUtils.DocToPdf;
 import org.jeecg.modules.demo.test.entity.JeecgDemo;
 import org.jeecg.modules.demo.test.service.IJeecgDemoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import static org.jeecg.modules.demo.cc.controller.Main.addNewLineBeforeIncreasingNumbers;
+
 
 /**
  * @Description: 单表示例
@@ -50,6 +49,9 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private DocToPdf DocToPdf;
 
     /**
      * 分页列表查询
@@ -86,7 +88,32 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
     @PostMapping(value = "/add")
     @AutoLog(value = "添加测试DEMO")
     @ApiOperation(value = "添加DEMO", notes = "添加DEMO")
-    public Result<?> add(@RequestBody JeecgDemo jeecgDemo) {
+    public Result<?> add(@RequestBody JeecgDemo jeecgDemo) throws Exception {
+
+
+        String input = "AA 1.BB 2.CC 3.DD 4.dasdasdasd";
+        String output = addNewLineBeforeIncreasingNumbers(input);
+
+
+        String ddd = "sssssxxx";
+        String text ="#这是第一行#这是第二行#这是第三行";
+        Map<String,Object> map = new HashMap<>();
+        map.put("number","11");
+        map.put("company","11");
+        map.put("money","11");
+        map.put("name","11");
+/*		map.put("inputa","ccc");
+		map.put("inputb","cccc");
+		map.put("inputc","dddd");*/
+        map.put("input",ddd+text);
+
+
+
+        DocToPdf.DocToPdf(map,"template.docx");
+
+
+
+
         jeecgDemoService.save(jeecgDemo);
         return Result.OK("添加成功！");
     }

@@ -12,6 +12,10 @@
     <artifactId>jeecg-module-system</artifactId>
     <packaging>pom</packaging>
 
+
+
+
+
     <modules>
         <module>jeecg-system-api</module>
         <module>jeecg-system-biz</module>
